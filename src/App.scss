@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+@mixin center(){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .container{
     display: flex;
     flex-wrap: wrap;
@@ -11,18 +17,14 @@
 .card_container{
     width:250px;
     height:300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include center();
 
     .card_body{
         width: 90%;
         height:90%;
         box-shadow:  4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        display: flex;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
+        @include center();
 
         .employye_img_img{
             width: 150px;

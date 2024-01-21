@@ -1,44 +1,51 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
-import axios from "axios";
+import { createSlice} from "@reduxjs/toolkit";
 
-interface InitialStateDataSet {
-    data:any;
-    status:'idle' | 'loading' | 'success' | 'failed',
-    error: string | null | any
+interface EmployeeDataObjectDataset{
+    first_name:string,
+    last_name:string,
+    avatar?:string,
+    id?:number,
+    email:string
+}
+interface EmployeeSlicsDataset{
+    data:EmployeeDataObjectDataset[],
+    loading:boolean,
+    error:string | null
 }
 
-export const fetchEmployees = createAsyncThunk('employees/fetchEmployees',async () => {
-    try {
-        const {data:{data}} = await axios.get("https://reqres.in/api/users")
-        return data
-    } catch (error) {
-        throw error;
-    }
-})
-
-const initialState:InitialStateDataSet = {
-    status:'idle',
+const initialState:EmployeeSlicsDataset = {
     data:[],
+    loading:false,
     error:null
 }
+
 const employeeSlice = createSlice({
     name:"employee",
     initialState:initialState,
-    reducers:{},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchEmployees.pending, (state) => {
-                state.status = 'loading'
-            })
-            .addCase(fetchEmployees.fulfilled, (state,action) => {
-                state.status = 'success';
-                state.data = action.payload
-            })
-            .addCase(fetchEmployees.rejected,(state,action) => {
-                state.status = 'failed';
-                state.error = action.error.message
-            })
-    },
+    reducers:{
+        fetchDataStart(state) {
+            state.loading = true;
+            state.error = null
+        },
+        fetchDataSuccess(state,action){
+            state.loading = false;
+            state.data = action.payload
+        },
+        fetchDataError(state,action){
+            state.loading = false;
+            state.error = action.payload
+        },
+        addDataToReduxStart(state,action){
+            state.loading = true;
+            state.error = null
+        },
+        addDataToRedux(state,action){
+            state.loading = false;
+            state.data = action.payload
+        },
+    }
 })
+
+export const {fetchDataStart, fetchDataSuccess, fetchDataError, addDataToRedux, addDataToReduxStart} = employeeSlice.actions
 
 export default employeeSlice.reducer

@@ -20,6 +20,8 @@ const EmployeeModal = ({isModalOpen, setIsModalOpen,onSubmitEmployee}:EmployeeMo
   }
 
   const submitDetails = () => {
+    console.log(employeeDetails);
+    
     onSubmitEmployee(employeeDetails)
     setEmployeeDetails({name:"",job:""})
   }
@@ -28,8 +30,8 @@ const EmployeeModal = ({isModalOpen, setIsModalOpen,onSubmitEmployee}:EmployeeMo
     <>
       <Modal className='modal_body' title="Basic Modal" open={isModalOpen} onCancel={handleCancel} footer={false}>
         <div className='employee_details'>
-            <Input className='input' placeholder='Enter Employee name' name="name" value={employeeDetails.name} onChange={(e)=>setEmployeeDetails({...employeeDetails,[e.target.name]:[e.target.value]})}/>
-            <Input className='input' placeholder='Enter job name' name="job" value={employeeDetails.job} onChange={(e)=>setEmployeeDetails({...employeeDetails,[e.target.name]:[e.target.value]})}/>
+            <Input className='input' placeholder='Enter Employee name' name="name" value={employeeDetails.name} onChange={(e)=>setEmployeeDetails({...employeeDetails,[e.target.name]:e.target.value})}/>
+            <Input className='input' placeholder='Enter job name' name="job" value={employeeDetails.job} onChange={(e)=>setEmployeeDetails({...employeeDetails,[e.target.name]:e.target.value})}/>
         </div>
         <div className="modal_footer">
             <Button type='primary' onClick={submitDetails}>Submit</Button>

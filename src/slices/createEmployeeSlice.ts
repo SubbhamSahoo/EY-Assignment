@@ -1,46 +1,36 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios'
+import { createSlice} from "@reduxjs/toolkit";
 
-interface InitialStateDataSet {
-    data:any;
-    status:'idle' | 'loading' | 'success' | 'failed',
-    error: string | null | any
+interface EmployeeSlicsDataset{
+    data:any,
+    loading:boolean,
+    error:string | null
 }
 
-export const createEmployee = createAsyncThunk("create/employeeData",async(body:any) => {
-    try {
-        const {data} = await axios.post("https://reqres.in/api/users",body)
-        alert(`${data.name} as an employee added successfully`)
-        return data
-    } catch (error) {
-        throw error;
-    }
-})
-
-const initialState:InitialStateDataSet = {
-    status:'idle',
+const initialState:EmployeeSlicsDataset = {
     data:{},
+    loading:false,
     error:null
 }
 
 const createEmployeeSlice = createSlice({
     name:"createEmployee",
     initialState:initialState,
-    reducers:{},
-    extraReducers : (builder) => {
-        builder
-            .addCase(createEmployee.pending,(state)=>{
-                state.status = 'loading'
-            })
-            .addCase(createEmployee.fulfilled,(state,action)=>{
-                state.status = 'success';
-                state.data = action.payload;
-            })
-            .addCase(createEmployee.rejected,(state,action)=>{
-                state.status='failed';
-                state.error=action.error.message
-            })
+    reducers:{
+        createEmployeeStart(state,action) {
+            state.loading = true;
+            state.error = null
+        },
+        createEmployeeSuccess(state,action) {
+            state.loading = false;
+            state.data = action.payload
+        },
+        createEmployeeError(state,action) {
+            state.loading = false;
+            state.error = action.payload
+        }
     }
 })
 
-export default createEmployeeSlice.reducer
+export const {createEmployeeStart, createEmployeeSuccess, createEmployeeError} = createEmployeeSlice.actions
+export type EmployeeActionType = typeof createEmployeeSlice.actions
+export default createEmployeeSlice.reducer;

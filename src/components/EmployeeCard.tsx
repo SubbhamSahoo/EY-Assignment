@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { createEmployee } from "../slices/createEmployeeSlice";
+import { createEmployeeStart } from "../slices/createEmployeeSlice";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import EmployeeModal from "./EmployeeModal";
+import { addDataToRedux, addDataToReduxStart } from "../slices/employeeSlice";
 
 
 interface EmployeeDataSet {
@@ -11,7 +12,7 @@ interface EmployeeDataSet {
 
 const EmployeeCard = ({employee}:EmployeeDataSet) => {
     const dispatch:AppDispatch = useDispatch()
-    const emplyeeData = useSelector((state:RootState)=>state.createEmployee)
+    const emplyeeData = useSelector((state:RootState)=>state.employee)
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const addEmployee = () =>{
@@ -19,8 +20,10 @@ const EmployeeCard = ({employee}:EmployeeDataSet) => {
     }
 
     const onSubmitEmployee = (data:{name:string,job:string}) =>{
-        dispatch(createEmployee(data))
+        dispatch(createEmployeeStart(data))
         setIsModalOpen(false)
+        const newData = [...emplyeeData.data,{first_name:data.name,last_Name:data.name,email:data.job}]
+        dispatch(addDataToReduxStart(newData))
     }
 
     return(
@@ -28,7 +31,7 @@ const EmployeeCard = ({employee}:EmployeeDataSet) => {
     <div className="card_container">
         <div className="card_body">
             {employee ? <><div className="employye_img_img">
-                <img src={employee.avatar}/>
+                <img src={employee.avatar || "http://irins.org/assets/profile_images/179145.png"}/>
             </div>
             <h1>{employee.first_name} {employee.last_name}</h1>
             <h4>{employee.email}</h4></>:
